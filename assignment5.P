@@ -1,0 +1,29 @@
+max([X],X).
+max([X|L],X) :- max(L,M), X > M.
+max([X|L],M) :- max(L,M), X =< M.
+
+
+insertNTerm(N,T,Res):- T=..[Func|Param],
+insertN(N,Param,NewParam),
+Res =.. [Func|NewParam].
+insertN(N,[H|T],Res):-insert(N,1,[H|T],Res).
+insert(_,_,[],[]).
+insert(N,K,[H|T],[H,1|Res1]):- M is mod(K,N), M == 0, K1 is K+1, insert(N,K1,T,Res1).
+insert(N,K,[H|T],[H|Res1]):- M is mod(K,N), M \== 0, K1 is K+1, insert(N,K1,T,Res1).  
+
+
+sublist([H|T],Res) :- findall(L1,sublist1([H|T],L1),Res).
+sublist1([],L1):- L1=[].
+sublist1([H|T],[H|Sub]):- sublist1(T,Sub).        
+sublist1([_|T],Sub) :- sublist1(T,Sub).
+
+position(X,[H|T],RES):-position1(X,1,[H|T],RES).
+position1(_,_,[],[]).
+position1(X,N,[H|T],[N|RES]):- X==H , N1 is N+1 , position1(X,N1,T,RES).
+position1(X,N,[H|T],RES):- X\==H , N1 is N+1 , position1(X,N1,T,RES).
+
+
+merge([],L2,L2).
+merge(L1,[],L1).
+merge([X|T1],[Y|T2],[X|Res]):- X=<Y, merge(T1,[Y|T2],Res).
+merge([X|T1],[Y|T2],[Y|Res]):- X>Y, merge([X|T1],T2,Res).
